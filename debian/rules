@@ -1,0 +1,13 @@
+#!/usr/bin/make -f
+
+PACKAGE = yagf
+PROJECT = yagf
+
+CUR_VER = $(shell uscan --dehs | sed -n 's/.*<upstream-version>\(.*\)<\/upstream-version>.*/\1/p')
+
+%:
+	dh $@ --parallel
+
+get-orig-source:
+	wget -4 -c "http://symmetrica.net/cuneiform-linux/$(PROJECT)-$(CUR_VER).tar.gz"
+	mv "$(PROJECT)-$(CUR_VER).tar.gz" ../"$(PACKAGE)_$(CUR_VER).orig.tar.gz"
