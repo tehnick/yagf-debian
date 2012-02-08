@@ -13,7 +13,7 @@ Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends},
  cuneiform | tesseract-ocr
 Recommends: xsane
-Description: Graphical interface for cuneiform and tesseract
+Description: graphical interface for cuneiform and tesseract
  YAGF is a graphical interface for cuneiform and tesseract text recognition
  tools on the Linux platform. With YAGF you can scan images via XSane, import
  pages from PDF documents, perform images preprocessing and recognize texts
