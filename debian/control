@@ -6,7 +6,7 @@ Build-Depends: debhelper (>= 7), cmake, libaspell-dev, libqt4-dev
 Homepage: http://symmetrica.net/cuneiform-linux/yagf-en.html
 Vcs-Git: git://github.com/tehnick/yagf-debian.git
 Vcs-Browser: https://github.com/tehnick/yagf-debian
-Standards-Version: 3.9.2
+Standards-Version: 3.9.3
 
 Package: yagf
 Architecture: any
