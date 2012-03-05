@@ -8,7 +8,7 @@ Source: http://symmetrica.net/cuneiform-linux/yagf-en.html
  See section get-orig-source in debian/rules file for details.
 
 Files: *
-Copyright: 2009-2011 Andrei Borovsky <anb@symmetrica.net>
+Copyright: 2009-2012 Andrei Borovsky <anb@symmetrica.net>
 License: GPL-3+
 
 Files: yagf.spec
