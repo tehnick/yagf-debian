@@ -23,9 +23,20 @@ Copyright: 2009-2012 Andrei Borovsky <anb@symmetrica.net>
 License: GPL-3+
 
 Files: src/images/*
-Copyright: 2009-2012 Andrei Borovsky <anb@symmetrica.net>
- 2005-2012 Oxygen Team (http://www.oxygen-icons.org/)
+Copyright: 2005-2012 Oxygen Team (http://www.oxygen-icons.org/)
 License: CC-BY-SA-3.0 or LGPL-3+
+
+Files: src/images/yagf.png
+Copyright: 2009-2012 Andrei Borovsky <anb@symmetrica.net>
+License: LGPL-3+
+
+Files: src/images/scanner.png src/images/scanner48.png
+Copyright: 2006-2007 Everaldo Coelho (http://www.everaldo.com/crystal/)
+License: LGPL-3+
+
+Files: src/images/check_spelling.png
+Copyright: 2008-2009 Schollidesign (http://schollidesign.deviantart.com/)
+License: LGPL-3+
 
 Files: debian/*
 Copyright: 2012 Boris Pek <tehnick-8@mail.ru>
