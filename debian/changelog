@@ -1,5 +1,5 @@
-yagf (0.9-1) unstable; urgency=low
+yagf (0.9+svn247-1) unstable; urgency=low
 
   * Initial release (closes: #619056).
 
- -- Boris Pek <tehnick-8@mail.ru>  Fri, 16 Mar 2012 20:58:36 +0200
+ -- Boris Pek <tehnick-8@mail.ru>  Sat, 17 Mar 2012 14:24:11 +0200
