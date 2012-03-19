@@ -1,3 +1,9 @@
+yagf (0.9+svn247-2) unstable; urgency=low
+
+  * debian/control was updated: fix for cmake >= 2.8.6.
+
+ -- Boris Pek <tehnick-8@mail.ru>  Mon, 19 Mar 2012 19:27:29 +0200
+
 yagf (0.9+svn247-1) unstable; urgency=low
 
   * Initial release (closes: #619056).
