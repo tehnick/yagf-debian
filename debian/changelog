@@ -1,3 +1,15 @@
+yagf (0.9.1-1) unstable; urgency=low
+
+  * Update to stable release 0.9.1.
+  * debian/copyright was updated:
+    - yagf.spec was deleted from sources in upstream
+    - new translator was added
+  * debian/yagf.1 (man page) was updated.
+  * Fixes from upstream: default spell check language was changed
+    from Russian to English. (Closes: #665913)
+
+ -- Boris Pek <tehnick-8@mail.ru>  Mon, 23 Apr 2012 23:07:54 +0300
+
 yagf (0.9+svn247-2) unstable; urgency=low
 
   * debian/control was updated: fix for cmake >= 2.8.6.
