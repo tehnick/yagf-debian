@@ -11,15 +11,12 @@ Files: *
 Copyright: 2009-2012 Andrei Borovsky <anb@symmetrica.net>
 License: GPL-3+
 
-Files: yagf.spec
-Copyright: 2009 Kyrill Detinov <lazy.kent.suse@gmail.com>
-License: GPL-3+
-
 Files: src/translations/*
 Copyright: 2009-2012 Andrei Borovsky <anb@symmetrica.net>
  2009-2012 Stefan Garthe <s.garthe@tu-braunschweig.de>
  2009-2012 Andrzej Januszkiewicz <andja@ffp2.pl>
  2009-2012 Olexa Stasevych <oleksiy.stasevych@gmail.com>
+ 2012 Donatas Glodenis <dg@lapas.info>
 License: GPL-3+
 
 Files: src/images/*
