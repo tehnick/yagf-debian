@@ -1,3 +1,11 @@
+yagf (0.9.1-2) unstable; urgency=low
+
+  * debian/rules was updated:
+    - now uscan is used instead of direct using of wget and mv commands
+    - used hardening flags in compiler options
+
+ -- Boris Pek <tehnick-8@mail.ru>  Sun, 10 Jun 2012 15:47:44 +0300
+
 yagf (0.9.1-1) unstable; urgency=low
 
   * Update to stable release 0.9.1.
