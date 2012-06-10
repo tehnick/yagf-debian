@@ -1,13 +1,13 @@
 #!/usr/bin/make -f
 
-PACKAGE = yagf
-PROJECT = yagf
-
-CUR_VER = $(shell uscan --dehs | sed -n 's/.*<upstream-version>\(.*\)<\/upstream-version>.*/\1/p')
+CPPFLAGS:=$(shell dpkg-buildflags --get CPPFLAGS)
+CFLAGS:=$(shell dpkg-buildflags --get CFLAGS) $(CPPFLAGS)
+CXXFLAGS:=$(shell dpkg-buildflags --get CXXFLAGS) $(CPPFLAGS)
+LDFLAGS:=$(shell dpkg-buildflags --get LDFLAGS) -Wl,--as-needed
+export CPPFLAGS CFLAGS CXXFLAGS LDFLAGS
 
 %:
 	dh $@ --parallel
 
 get-orig-source:
-	wget -4 -c "http://symmetrica.net/cuneiform-linux/$(PROJECT)-$(CUR_VER).tar.gz"
-	mv "$(PROJECT)-$(CUR_VER).tar.gz" ../"$(PACKAGE)_$(CUR_VER).orig.tar.gz"
+	uscan --noconf --verbose --force-download --rename --download-current-version --destdir=..
