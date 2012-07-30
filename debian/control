@@ -12,7 +12,7 @@ Standards-Version: 3.9.3
 Package: yagf
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends},
- cuneiform | tesseract-ocr
+ tesseract-ocr | cuneiform
 Recommends: xsane
 Description: graphical interface for cuneiform and tesseract
  YAGF is a graphical interface for cuneiform and tesseract text recognition
