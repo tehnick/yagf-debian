@@ -8,6 +8,7 @@ Homepage: http://symmetrica.net/cuneiform-linux/yagf-en.html
 Vcs-Git: git://github.com/tehnick/yagf-debian.git
 Vcs-Browser: https://github.com/tehnick/yagf-debian
 Standards-Version: 3.9.3
+DM-Upload-Allowed: yes
 
 Package: yagf
 Architecture: any
