@@ -1,3 +1,9 @@
+yagf (0.9.2-2) unstable; urgency=low
+
+  * Move package to unstable: no changes required.
+
+ -- Boris Pek <tehnick-8@mail.ru>  Sun, 12 May 2013 20:15:58 +0300
+
 yagf (0.9.2-1) experimental; urgency=low
 
   * Update to stable release 0.9.2.
