@@ -1,5 +1,12 @@
 #!/usr/bin/make -f
 
+PACKAGE = yagf
+
+DEBIAN_PATH  := $(abspath $(dir $(firstword $(MAKEFILE_LIST))))
+USCAN_REPORT = $(shell uscan --noconf --report --dehs $(DEBIAN_PATH))
+CUR_VER = $(shell echo "$(USCAN_REPORT)" | sed -n 's/.*<upstream-version>\(.*\)<\/upstream-version>.*/\1/p')
+CUR_URL = $(shell echo "$(USCAN_REPORT)" | sed -n 's/.*<upstream-url>\(.*\)<\/upstream-url>.*/\1/p')
+
 CPPFLAGS:=$(shell dpkg-buildflags --get CPPFLAGS)
 CFLAGS:=$(shell dpkg-buildflags --get CFLAGS) $(CPPFLAGS)
 CXXFLAGS:=$(shell dpkg-buildflags --get CXXFLAGS) $(CPPFLAGS)
@@ -10,4 +17,4 @@ export CPPFLAGS CFLAGS CXXFLAGS LDFLAGS
 	dh $@ --parallel
 
 get-orig-source:
-	uscan --noconf --verbose --force-download --rename --download-current-version --destdir=..
+	wget -c4 "$(CUR_URL)" -O "$(PACKAGE)_$(CUR_VER).orig.tar.gz"
