@@ -2,8 +2,7 @@ Source: yagf
 Section: graphics
 Priority: optional
 Maintainer: Boris Pek <tehnick@debian.org>
-Build-Depends: debhelper (>= 9), cmake,
- libqt4-dev, libaspell-dev, aspell
+Build-Depends: aspell, cmake, debhelper (>= 9), libaspell-dev, libqt4-dev
 Homepage: http://symmetrica.net/cuneiform-linux/yagf-en.html
 Vcs-Git: git://github.com/tehnick/yagf-debian.git
 Vcs-Browser: https://github.com/tehnick/yagf-debian
@@ -11,8 +10,7 @@ Standards-Version: 3.9.5
 
 Package: yagf
 Architecture: any
-Depends: ${misc:Depends}, ${shlibs:Depends},
- tesseract-ocr | cuneiform
+Depends: tesseract-ocr | cuneiform, ${misc:Depends}, ${shlibs:Depends}
 Recommends: xsane
 Description: graphical interface for cuneiform and tesseract
  YAGF is a graphical interface for cuneiform and tesseract text recognition
