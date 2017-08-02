@@ -1,2 +1,3 @@
 version=3
-http://symmetrica.net/cuneiform-linux/yagf-en.html .*yagf-(.+).tar.gz.*
+http://sf.net/yagf-ocr/yagf-(.+)\.tar\.gz \
+debian uupdate
