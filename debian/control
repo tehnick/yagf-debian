@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Boris Pek <tehnick@debian.org>
 Build-Depends: aspell, cmake, debhelper (>= 9), libaspell-dev, libqt4-dev
 Homepage: http://symmetrica.net/cuneiform-linux/yagf-en.html
-Vcs-Git: git://github.com/tehnick/yagf-debian.git
+Vcs-Git: https://github.com/tehnick/yagf-debian.git
 Vcs-Browser: https://github.com/tehnick/yagf-debian
 Standards-Version: 3.9.5
 
