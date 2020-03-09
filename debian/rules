@@ -1,16 +1,11 @@
 #!/usr/bin/make -f
 
-PACKAGE = yagf
-
-DEBIAN_PATH  := $(abspath $(dir $(firstword $(MAKEFILE_LIST))))
-USCAN_REPORT = $(shell uscan --noconf --report --dehs $(DEBIAN_PATH))
-CUR_VER = $(shell echo "$(USCAN_REPORT)" | sed -n 's/.*<upstream-version>\(.*\)<\/upstream-version>.*/\1/p')
-CUR_URL = $(shell echo "$(USCAN_REPORT)" | sed -n 's/.*<upstream-url>\(.*\)<\/upstream-url>.*/\1/p')
-
-LDFLAGS += -Wl,--as-needed
+export DEB_LDFLAGS_MAINT_APPEND = -Wl,--as-needed
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 
 %:
-	dh $@ --parallel
+	dh $@
 
-get-orig-source:
-	wget -c "$(CUR_URL)" -O "$(PACKAGE)_$(CUR_VER).orig.tar.gz"
+override_dh_installdocs:
+	dh_installdocs
+	rm -rf debian/yagf/usr/share/appdata/
