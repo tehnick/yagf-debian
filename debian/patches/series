@@ -1,1 +1,15 @@
-fix-library-path-on-amd64-systems.patch
+01_fix-library-path-on-amd64-systems.patch
+02_update-desktop-file.patch
+03_disable-cropping-of-loaded-images.patch
+04_port-to-qt5.patch
+05_additional-qt5-related-fixes.patch
+06_remove-online-help.patch
+07_fix-application-size.patch
+08_fix-config-dialog.patch
+09_add-chinese.patch
+10_fix-translation-files.patch
+11_install-ukrainian-translation.patch
+12_add-missing-unistd-include.patch
+13_disable-extra-threads.patch
+14_fix-crash-when-specific-aspell-dictionary-is-not-found.patch
+15_fix-spelling-errors.patch

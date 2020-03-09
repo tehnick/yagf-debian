@@ -1,0 +1,367 @@
+Description: port to Qt5
+Last-Update: 2020-03-09
+Origin: upstream, https://sourceforge.net/p/yagf-ocr/code/ci/qt5/tree/
+Bug: https://sourceforge.net/p/yagf-ocr/tickets/55/
+Bug-Debian: https://bugs.debian.org/875243
+Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/yagf/+bug/1757913
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 0cba1cf..52e1d39 100755
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,5 +1,5 @@
+ project(yagf C CXX)
+-cmake_minimum_required(VERSION 2.6.0)
++cmake_minimum_required(VERSION 2.8.3)
+ #set(QT_QMAKE_EXECUTABLE /usr/bin/qmake-qt4)
+ if (NOT DEFINED  ${CMAKE_INSTALL_PREFIX})
+ set(CPACK_INSTALL_PREFIX /usr/)
+@@ -49,25 +49,31 @@ set(QM_FILES ${CMAKE_BINARY_DIR}/yagf_ru.qm ${CMAKE_BINARY_DIR}/yagf_fr.qm)
+ 
+ add_definitions(-Wall -g)
+ 
+-find_package(Qt4 4.6 REQUIRED)
++find_package(Qt5Core 5.3 REQUIRED)
++find_package(Qt5Widgets 5.3 REQUIRED)
++find_package(Qt5LinguistTools REQUIRED)
++find_package(Qt5Concurrent REQUIRED)
+ find_package(ASPELL REQUIRED)
++
+ include_directories(${ASPELL_INCLUDE_DIR})
++include_directories(${Qt5Widgets_INCLUDE_DIRS})
+ 
+-include(${QT_USE_FILE})
+-qt4_wrap_ui(UI_HEADERS ${UIS})
+-qt4_wrap_cpp(MOC_SRCS ${MOC_HEADERS})
+-qt4_add_resources(yagf_RCC_SRCS ${yagf_RCCS})
++qt5_wrap_ui(UI_HEADERS ${UIS})
++qt5_wrap_cpp(MOC_SRCS ${MOC_HEADERS})
++qt5_add_resources(yagf_RCC_SRCS ${yagf_RCCS})
+ 
+ include_directories( ${CMAKE_BINARY_DIR} ${PROJECT_SOURCE_DIR}/src)
+ add_executable(yagf ${SOURCES} ${UI_HEADERS} ${MOC_SRCS} ${yagf_RCC_SRCS} ${QM_FILES})
++#qt5_use_modules(QtConcurrent yagf)
+ add_library(xspreload SHARED ${INT_SOURCES})
+ 
+ target_link_libraries(xspreload ${CMAKE_DL_LIBS})
+-target_link_libraries(yagf ${QT_LIBRARIES} ${ASPELL_LIBRARIES})
++target_link_libraries(yagf ${Qt5Widgets_LIBRARIES} ${ASPELL_LIBRARIES})
+ 
+ add_custom_target(translations DEPENDS ${QM_FILES})
+-qt4_add_translation(${CMAKE_BINARY_DIR}/yagf_ru.qm ${PROJECT_SOURCE_DIR}/src/mainform.cpp ${PROJECT_SOURCE_DIR}/src/popplerdialog.cpp ${MOC_SRCS} ${UI_HEADERS} ${PROJECT_SOURCE_DIR}/src/translations/yagf_ru.ts)
+-qt4_add_translation(${CMAKE_BINARY_DIR}/yagf_fr.qm ${PROJECT_SOURCE_DIR}/src/mainform.cpp ${PROJECT_SOURCE_DIR}/src/popplerdialog.cpp ${MOC_SRCS} ${UI_HEADERS} ${PROJECT_SOURCE_DIR}/src/translations/yagf_fr.ts)
++qt5_create_translation(${CMAKE_BINARY_DIR}/yagf_ru.qm ${PROJECT_SOURCE_DIR}/src/mainform.cpp ${PROJECT_SOURCE_DIR}/src/popplerdialog.cpp ${MOC_SRCS} ${UI_HEADERS} ${PROJECT_SOURCE_DIR}/src/translations/yagf_ru.ts)
++qt5_create_translation(${CMAKE_BINARY_DIR}/yagf_uk.qm ${PROJECT_SOURCE_DIR}/src/mainform.cpp ${PROJECT_SOURCE_DIR}/src/popplerdialog.cpp ${MOC_SRCS} ${UI_HEADERS} ${PROJECT_SOURCE_DIR}/src/translations/yagf_uk.ts)
++qt5_create_translation(${CMAKE_BINARY_DIR}/yagf_fr.qm ${PROJECT_SOURCE_DIR}/src/mainform.cpp ${PROJECT_SOURCE_DIR}/src/popplerdialog.cpp ${MOC_SRCS} ${UI_HEADERS} ${PROJECT_SOURCE_DIR}/src/translations/yagf_fr.ts)
+ #QT4_CREATE_TRANSLATION(yagf_ru.qm src/mainform.cpp ${MOC_SRCS} ${UI_HEADERS} src/yagf_ru.ts)
+ #set(CMAKE_INSTALL_PREFIX /usr/)
+ 
+diff --git a/src/autosaver.cpp b/src/autosaver.cpp
+index a7e51f8..5a54225 100755
+--- a/src/autosaver.cpp
++++ b/src/autosaver.cpp
+@@ -8,13 +8,17 @@ AutoSaver::AutoSaver(QObject *parent) :
+ {
+ }
+ 
++extern bool doingAutoSave;
++
+ void AutoSaver::save(const QString &path)
+ {
++    doingAutoSave = true;
+     ProjectSaver ps;
+     if (!ps.save(path))
+         emit reportError(trUtf8("failed to save the project"));
+     else
+         emit saved();
++    doingAutoSave = false;
+ }
+ 
+ AutoSaveManager::AutoSaveManager(QObject *parent):
+diff --git a/src/core/qipgrayscaleimage.cpp b/src/core/qipgrayscaleimage.cpp
+index dac5811..ac48eae 100755
+--- a/src/core/qipgrayscaleimage.cpp
++++ b/src/core/qipgrayscaleimage.cpp
+@@ -24,7 +24,7 @@
+ #include <QRect>
+ #include <QFile>
+ #include <QFuture>
+-#include <QtConcurrentRun>
++#include <QtConcurrent/QtConcurrent>
+ 
+ 
+ #define IPRIT_MULTITHREADING
+@@ -165,8 +165,8 @@ if (y2 == 0) y2 = h;
+     histogramInternal(&result[0], r);
+ #endif
+ #ifdef IPRIT_MULTITHREADING
+-    IntRect r1 = {x1,y1,x2,(y1+y2)/2};
+-    IntRect r2 = {x1,(y1+y2)/2,x2,y2};
++    IntRect r1 = {(int)x1,(int)y1,(int)x2,(int)(y1+y2)/2};
++    IntRect r2 = {(int)x1,(int)(y1+y2)/2,(int)x2,(int)y2};
+     qreal h1[256] = {0.0};
+     qreal h2[256] = {0.0};
+     QFuture<void> future1 = QtConcurrent::run(this, &QIPGrayscaleImage::histogramInternal,&h1[0],r1);
+@@ -273,7 +273,7 @@ bool QIPGrayscaleImage::save(const QString &fileName, bool overwrite)
+     bool res = f.open(QIODevice::WriteOnly);
+     if (!res)
+         return false;
+-    f.write(fheader.toAscii(), 4);
++    f.write(fheader.toLocal8Bit(), 4);
+     f.write((char*) &hx, 2);
+     f.write((char*) &wx, 2);
+     f.write((char*)data.data(), wx*hx);
+@@ -292,7 +292,7 @@ bool QIPGrayscaleImage::saveGrayscale(const QImage &image, const QString &fileNa
+         return false;
+     if(!f.open(QIODevice::WriteOnly))
+         return false;
+-    f.write(fheader.toAscii(), 4);
++    f.write(fheader.toLocal8Bit(), 4);
+     f.write((char*) &hx, 2);
+     f.write((char*) &wx, 2);
+     quint8 * d = new quint8[wx];
+@@ -527,7 +527,7 @@ QPoint QIPGrayscaleImage::loadHeader(QFile *file)
+     QPoint res(0,0);
+     char header[5] = {0};
+     file->read(header, 4);
+-    if (QString::fromAscii(header) != fheader)
++    if (QString::fromLocal8Bit(header) != fheader)
+         return res;
+     quint16 wx, hx;
+     file->read((char*) &hx, 2);
+diff --git a/src/droplabel.cpp b/src/droplabel.cpp
+index 462843e..369fc05 100755
+--- a/src/droplabel.cpp
++++ b/src/droplabel.cpp
+@@ -26,6 +26,7 @@
+ #include <QtDebug>
+ #include <QListWidget>
+ #include <QList>
++#include <QMimeData>
+ 
+ DropLabel::DropLabel(QWidget *parent, Qt::WindowFlags f) : QLabel(parent, f)
+ {
+diff --git a/src/mainform.cpp b/src/mainform.cpp
+index 423ec0c..0b4d7ce 100755
+--- a/src/mainform.cpp
++++ b/src/mainform.cpp
+@@ -69,7 +69,6 @@
+ #include <QEvent>
+ #include <QCursor>
+ #include <QLineEdit>
+-#include <QGtkStyle>
+ #include <QToolTip>
+ #include <QPoint>
+ #include <QAction>
+@@ -854,11 +853,17 @@ void MainForm::setUnresizingCusor()
+     //scrollArea->widget()->setCursor(QCursor(Qt::ArrowCursor));
+ }
+ 
++extern bool doingAutoSave;
++
+ void MainForm::loadPage(bool show)
+ {
+     bool wasDirty = dirty;
+     connectTC(false);
+     textEdit->clear();
++    if (doingAutoSave){
++        graphicsInput->clear();
++       // graphicsInput->clearBlocks();
++    }
+     try {
+         if (!pages->currentText().isEmpty())
+             textEdit->setText(pages->currentText());
+@@ -872,7 +877,7 @@ void MainForm::loadPage(bool show)
+     connectTC(true);
+ 
+ 
+-    QApplication::processEvents();
++    //QApplication::processEvents();
+     if (show)
+     for (int i = 0; i < pages->blockCount(); i++)
+         graphicsInput->addBlockColliding(pages->getBlock(i));
+@@ -1382,7 +1387,7 @@ void MainForm::startedAutoSave()
+ {
+     _asm->work(projectName);
+     epd->setWindowTitle(trUtf8("Autosave"));
+-    epd->show();
++    epd->exec();
+ }
+ 
+ void MainForm::autosaveFinished()
+diff --git a/src/page.cpp b/src/page.cpp
+index 1d0dfa9..474734a 100755
+--- a/src/page.cpp
++++ b/src/page.cpp
+@@ -869,9 +869,13 @@ QImage Page::tryRotate(QImage image, qreal angle)
+     return image.transformed(QTransform().translate(-x, -y).rotate(angle).translate(x, y), Qt::SmoothTransformation);
+ }
+ 
++bool doingAutoSave = false;
++
+ QImage Page::currentImage()
+ {
+     if (!imageLoaded) {
++        if (doingAutoSave)
++            return QImage(0,0);
+         ImageProcessor ip;
+         img = ip.loadYGF(mFileName);
+         if (img.isNull())
+@@ -883,12 +887,7 @@ QImage Page::currentImage()
+         if (!img.isNull())
+             return img.scaled(img.width()*scale, img.height()*scale);
+         else {
+-            ImageProcessor ip;
+-            img = ip.loadYGF(mFileName);
+-            if (img.isNull())
+-                img.load(mFileName);
+-            applyTransforms(img, scale);
+-            return img;
++            return QImage(0,0);
+         }
+     } catch (...) {
+         return img;
+diff --git a/src/qgraphicsinput.cpp b/src/qgraphicsinput.cpp
+index b13f551..9b90707 100755
+--- a/src/qgraphicsinput.cpp
++++ b/src/qgraphicsinput.cpp
+@@ -363,7 +363,7 @@ void QGraphicsInput::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
+ 
+ void QGraphicsInput::leftMouseRelease(qreal x, qreal y)
+ {
+-    QGraphicsItem *it = this->itemAt(x, y);
++    QGraphicsItem *it = this->itemAt(x, y, QTransform());
+     if (it) {
+         if (it->data(1).toString() == "block") {
+             QGraphicsRectItem *r = (QGraphicsRectItem *) it;
+@@ -403,7 +403,7 @@ void QGraphicsInput::leftMouseRelease(qreal x, qreal y)
+ 
+ void QGraphicsInput::rightMouseRelease(qreal x, qreal y)
+ {
+-    QGraphicsItem *it = this->itemAt(x, y);
++    QGraphicsItem *it = this->itemAt(x, y, QTransform());
+     if (it) {
+         if (it->data(1).toString() == "block") {
+             m_CurrentBlockRect = (QGraphicsRectItem *) it;
+diff --git a/src/recognizerwrapperinternal.h b/src/recognizerwrapperinternal.h
+index 2596bd5..4a7c01d 100755
+--- a/src/recognizerwrapperinternal.h
++++ b/src/recognizerwrapperinternal.h
+@@ -81,7 +81,7 @@ signals:
+     void error(QProcess::ProcessError);
+     void error(const QString &text);
+     void blockRecognized(int n);
+-    void readOutput(QString text, QChar separator = QChar::fromAscii('\n'));
++    void readOutput(QString text, QChar separator = QChar::fromLatin1('\n'));
+ public slots:
+     void onFinished(int i)
+     {
+@@ -126,10 +126,10 @@ private: // functions
+         }
+         textFile.close();
+         textData = textData.replace(" ,", ",");
+-        QChar sep = QChar::fromAscii(']');
++        QChar sep = QChar::fromLatin1(']');
+         if (pc->blockCount() > blockIndex) {
+             if (pc->getBlock(blockIndex).isTableCell())
+-                sep = QChar::fromAscii('|');
++                sep = QChar::fromLatin1('|');
+         }
+         emit readOutput(textData, sep);
+     }
+diff --git a/src/sidebar.cpp b/src/sidebar.cpp
+index 137809e..d229fa1 100755
+--- a/src/sidebar.cpp
++++ b/src/sidebar.cpp
+@@ -27,6 +27,7 @@
+ #include <QFileInfo>
+ #include <QDrag>
+ #include <QSize>
++#include <QMimeData>
+ 
+ 
+ SideBar::SideBar(QWidget *parent) :
+diff --git a/src/spellchecker.cpp b/src/spellchecker.cpp
+index eb24dd5..b1a582a 100755
+--- a/src/spellchecker.cpp
++++ b/src/spellchecker.cpp
+@@ -33,8 +33,8 @@ SpellChecker::SpellChecker(QTextEdit *textEdit): m_textEdit(textEdit)
+     //m_cursor= new QTextCursor(m_textEdit->document());
+     spell_config1 = new_aspell_config();
+     spell_config2 = new_aspell_config();
+-    aspell_config_replace(spell_config1, "lang", m_lang1.toAscii());
+-    aspell_config_replace(spell_config2, "lang", m_lang2.toAscii());
++    aspell_config_replace(spell_config1, "lang", m_lang1.toLocal8Bit());
++    aspell_config_replace(spell_config2, "lang", m_lang2.toLocal8Bit());
+     aspell_config_replace(spell_config1, "encoding", "utf-8");
+     aspell_config_replace(spell_config2, "encoding", "utf-8");
+     m_map = new StringMap();
+@@ -174,8 +174,8 @@ void SpellChecker::setLanguage(const QString &lang)
+         m_lang2 = "en";
+ 
+     }
+-    aspell_config_replace(spell_config1, "lang", m_lang1.toAscii());
+-    aspell_config_replace(spell_config2, "lang", m_lang2.toAscii());
++    aspell_config_replace(spell_config1, "lang", m_lang1.toLocal8Bit());
++    aspell_config_replace(spell_config2, "lang", m_lang2.toLocal8Bit());
+     AspellCanHaveError *possible_err = new_aspell_speller(spell_config1);
+     spell_checker1 = 0;
+     if (aspell_error_number(possible_err) == 0)
+diff --git a/src/texteditor.cpp b/src/texteditor.cpp
+index 705b3ff..4f56a3e 100755
+--- a/src/texteditor.cpp
++++ b/src/texteditor.cpp
+@@ -139,7 +139,7 @@ void TextEditor::saveHtml(QFile *file)
+     text.replace(".bmp]", ".bmp>");
+     QDir dir(workingDir+"output_files");
+     dir.rename(workingDir+"output_files", newDir);*/
+-    file->write(text.toAscii());
++    file->write(text.toLocal8Bit());
+ }
+ 
+ void TextEditor::globalReplace(const QString &what, const QString &with)
+diff --git a/src/tiffimporter.cpp b/src/tiffimporter.cpp
+index 9a0d7ea..aa82704 100755
+--- a/src/tiffimporter.cpp
++++ b/src/tiffimporter.cpp
+@@ -61,7 +61,7 @@ void TiffImporter::exec()
+         if (!ir.read().isNull())
+             files.append(tiffName);
+         else {
+-            const QString ppmFile = QString::fromAscii("input.ppm");
++            const QString ppmFile = QString::fromUtf8("input.ppm");
+             if (dir.exists(ppmFile)) {
+                 dir.remove(ppmFile);
+                 QProcess proc;
+diff --git a/src/tpagecollection.cpp b/src/tpagecollection.cpp
+index 13535f6..598edcc 100755
+--- a/src/tpagecollection.cpp
++++ b/src/tpagecollection.cpp
+@@ -433,7 +433,7 @@ void PageCollection::storeCurrentIndex()
+ void PageCollection::restoreCurrentIndex()
+ {
+     makePageCurrentByID(currentId);
+-    emit loadPage(true);
++    //emit loadPage(true);
+ }
+ 
+ 
+diff --git a/src/utils.cpp b/src/utils.cpp
+index 265d264..f4d0d31 100755
+--- a/src/utils.cpp
++++ b/src/utils.cpp
+@@ -45,11 +45,11 @@ QString extractFilePath(const QString &path)
+ 
+ QString extractDigits(const QString &fn)
+ {
+-    bool extracting = FALSE;
++    bool extracting = false;
+     QString result = "";
+     for (int i = 0; i < fn.size(); i++)
+         if ((fn.at(i) >= '0') && (fn.at(i) <= '9')) {
+-            extracting = TRUE;
++            extracting = true;
+             result += fn.at(i);
+         } else {
+             if (extracting) break;

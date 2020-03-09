@@ -1,0 +1,22 @@
+Description: fix translation files
+Last-Update: 2020-03-09
+Origin: Mageia,
+ http://svnweb.mageia.org/packages/cauldron/yagf/current/SOURCES/yagf-0.9.5-mga-uk.patch?revision=1555054&view=co
+Forwarded: yes, https://sourceforge.net/p/yagf-ocr/tickets/71/
+Bug: https://sourceforge.net/p/yagf-ocr/tickets/71/
+
+
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -71,9 +71,9 @@
+ target_link_libraries(yagf ${Qt5Widgets_LIBRARIES} ${ASPELL_LIBRARIES})
+ 
+ add_custom_target(translations DEPENDS ${QM_FILES})
+-qt5_create_translation(${CMAKE_BINARY_DIR}/yagf_ru.qm ${PROJECT_SOURCE_DIR}/src/mainform.cpp ${PROJECT_SOURCE_DIR}/src/popplerdialog.cpp ${MOC_SRCS} ${UI_HEADERS} ${PROJECT_SOURCE_DIR}/src/translations/yagf_ru.ts)
+-qt5_create_translation(${CMAKE_BINARY_DIR}/yagf_uk.qm ${PROJECT_SOURCE_DIR}/src/mainform.cpp ${PROJECT_SOURCE_DIR}/src/popplerdialog.cpp ${MOC_SRCS} ${UI_HEADERS} ${PROJECT_SOURCE_DIR}/src/translations/yagf_uk.ts)
+-qt5_create_translation(${CMAKE_BINARY_DIR}/yagf_fr.qm ${PROJECT_SOURCE_DIR}/src/mainform.cpp ${PROJECT_SOURCE_DIR}/src/popplerdialog.cpp ${MOC_SRCS} ${UI_HEADERS} ${PROJECT_SOURCE_DIR}/src/translations/yagf_fr.ts)
++qt5_create_translation(${CMAKE_BINARY_DIR}/yagf_ru.qm ${SOURCES} ${MOC_SRCS} ${UI_HEADERS} ${PROJECT_SOURCE_DIR}/src/translations/yagf_ru.ts)
++qt5_create_translation(${CMAKE_BINARY_DIR}/yagf_uk.qm ${SOURCES} ${MOC_SRCS} ${UI_HEADERS} ${PROJECT_SOURCE_DIR}/src/translations/yagf_uk.ts)
++qt5_create_translation(${CMAKE_BINARY_DIR}/yagf_fr.qm ${SOURCES} ${MOC_SRCS} ${UI_HEADERS} ${PROJECT_SOURCE_DIR}/src/translations/yagf_fr.ts)
+ #QT4_CREATE_TRANSLATION(yagf_ru.qm src/mainform.cpp ${MOC_SRCS} ${UI_HEADERS} src/yagf_ru.ts)
+ #set(CMAKE_INSTALL_PREFIX /usr/)

@@ -1,0 +1,19 @@
+Description: install Ukrainian translation
+Last-Update: 2020-03-09
+Origin: Mageia,
+ http://svnweb.mageia.org/packages/cauldron/yagf/current/SOURCES/yagf-0.9.5-mga-uk.patch?revision=1555054&view=co
+Forwarded: yes, https://sourceforge.net/p/yagf-ocr/tickets/70/
+Bug: https://sourceforge.net/p/yagf-ocr/tickets/70/
+
+
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -44,7 +44,7 @@
+ 
+ set(yagf_RCCS src/yagf.qrc)
+ 
+-set(QM_FILES ${CMAKE_BINARY_DIR}/yagf_ru.qm ${CMAKE_BINARY_DIR}/yagf_fr.qm)
++set(QM_FILES ${CMAKE_BINARY_DIR}/yagf_ru.qm ${CMAKE_BINARY_DIR}/yagf_fr.qm ${CMAKE_BINARY_DIR}/yagf_uk.qm)
+ 
+ 
+ add_definitions(-Wall -g)

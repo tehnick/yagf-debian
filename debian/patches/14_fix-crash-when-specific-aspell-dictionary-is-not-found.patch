@@ -1,0 +1,54 @@
+Description: fix crash when specific aspell dictionary is not found
+Last-Update: 2020-03-09
+Origin: Mageia,
+ http://svnweb.mageia.org/packages/cauldron/yagf/current/SOURCES/yagf-0.9.5-do-not-crash-when-specific-aspell-dictionary-is-not-found.patch?revision=1555054&view=co
+Forwarded: yes, https://sourceforge.net/p/yagf-ocr/tickets/52/
+Bug: https://sourceforge.net/p/yagf-ocr/tickets/52/
+
+
+--- a/src/spellchecker.cpp
++++ b/src/spellchecker.cpp
+@@ -136,7 +136,6 @@
+ 
+ void SpellChecker::setLanguage(const QString &lang)
+ {
+-    if (lang.isEmpty()) return;
+     delete_aspell_speller(spell_checker1);
+     delete_aspell_speller(spell_checker2);
+     bad_language.clear();
+@@ -169,11 +168,6 @@
+         m_lang2 = "de_AT";
+ 
+     }
+-    if (lang == "ruseng") {
+-        m_lang1 = "ru";
+-        m_lang2 = "en";
+-
+-    }
+     aspell_config_replace(spell_config1, "lang", m_lang1.toLocal8Bit());
+     aspell_config_replace(spell_config2, "lang", m_lang2.toLocal8Bit());
+     AspellCanHaveError *possible_err = new_aspell_speller(spell_config1);
+@@ -199,7 +193,7 @@
+ 
+ bool SpellChecker::spellCheck()
+ {
+-    if ((spell_checker1 == 0) && (spell_checker2 == 0)) {
++    if ((spell_checker1 == 0) || (spell_checker2 == 0)) {
+         QPixmap icon;
+         icon.load(":/warning.png");
+         QMessageBox messageBox(QMessageBox::NoIcon, "YAGF", QObject::trUtf8("Required spelling dictionary (%1) is not found.\nSpell-checking is disabled.\nTry to install an appropriate aspell dictionary.").arg(bad_language),
+@@ -310,12 +304,12 @@
+ 
+     QByteArray ba = tmp.toUtf8();
+     return (aspell_speller_check(spell_checker1, ba.data(), ba.size()) != 0) ||
+-           (aspell_speller_check((spell_checker2 != NULL ? spell_checker2 : spell_checker1), ba.data(), ba.size()) != 0);
++           (aspell_speller_check(spell_checker2, ba.data(), ba.size()) != 0);
+ }
+ 
+ void SpellChecker::checkWord()
+ {
+-    if ((spell_checker1 == 0) && (spell_checker2 == 0))
++    if ((spell_checker1 == 0) || (spell_checker2 == 0))
+         return;
+     QTextCursor cursor = m_textEdit->textCursor();
+     _checkWord(&cursor);

@@ -1,0 +1,18 @@
+Description: add missing unistd include
+Last-Update: 2020-03-09
+Origin: Mageia,
+ http://svnweb.mageia.org/packages/cauldron/yagf/current/SOURCES/yagf-0.9.5-fdr-mga-mainform-unistd.patch?revision=1555054&view=co
+Forwarded: yes, https://sourceforge.net/p/yagf-ocr/tickets/73/
+Bug: https://sourceforge.net/p/yagf-ocr/tickets/73/
+
+
+--- yagf-0.9.5.orig/src/mainform.cpp
++++ yagf-0.9.5/src/mainform.cpp
+@@ -17,6 +17,7 @@
+ 
+ */
+ 
++#include <unistd.h>
+ #include "sidebar.h"
+ #include "droplabel.h"
+ #include "popplerdialog.h"

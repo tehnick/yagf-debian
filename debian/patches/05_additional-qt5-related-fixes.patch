@@ -1,0 +1,149 @@
+Description: additional Qt5 related fixes
+Last-Update: 2020-03-09
+Origin: Mageia,
+ http://svnweb.mageia.org/packages/cauldron/yagf/current/SOURCES/yagf-0.9.5-mga-qt5.patch?revision=1555054&view=co
+Forwarded: yes, https://sourceforge.net/p/yagf-ocr/tickets/55/
+Bug: https://sourceforge.net/p/yagf-ocr/tickets/55/
+
+
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -52,7 +52,7 @@
+ find_package(Qt5Core 5.3 REQUIRED)
+ find_package(Qt5Widgets 5.3 REQUIRED)
+ find_package(Qt5LinguistTools REQUIRED)
+-find_package(Qt5Concurrent REQUIRED)
++#find_package(Qt5Concurrent REQUIRED)
+ find_package(ASPELL REQUIRED)
+ 
+ include_directories(${ASPELL_INCLUDE_DIR})
+--- a/src/mainform.h
++++ b/src/mainform.h
+@@ -64,17 +64,9 @@
+     void callAfterConstructor();
+ private slots:
+     //void on_actionRecognize_activated();
+-    void on_actionSelect_HTML_format_activated();
+     void upscale();
+     //void on_alignButton_clicked();
+-    void on_actionCheck_spelling_activated();
+-    void on_actionSave_block_activated();
+-    void on_actionSave_current_image_activated();
+-    void on_actionCheck_spelling_triggered();
+-    void on_actionRecognize_block_activated();
+     void recognize();
+-    void on_ActionDeleteBlock_activated();
+-    void on_ActionClearAllBlocks_activated();
+     void loadImage();
+     void rotateCWButtonClicked();
+     void rotateCCWButtonClicked();
+@@ -108,6 +100,14 @@
+ protected:
+     void timerEvent(QTimerEvent * e);
+ private:
++    void on_actionSelect_HTML_format_activated();
++    void on_actionCheck_spelling_activated();
++    void on_actionSave_block_activated();
++    void on_actionSave_current_image_activated();
++    void on_actionCheck_spelling_triggered();
++    void on_actionRecognize_block_activated();
++    void on_ActionDeleteBlock_activated();
++    void on_ActionClearAllBlocks_activated();
+     virtual void closeEvent(QCloseEvent *event);
+     void initSettings();
+     void loadFile(const QString &fn, bool loadIntoView = true);
+--- a/src/core/qipgrayscaleimage.cpp
++++ b/src/core/qipgrayscaleimage.cpp
+@@ -23,11 +23,11 @@
+ #include "common.h"
+ #include <QRect>
+ #include <QFile>
+-#include <QFuture>
+-#include <QtConcurrent/QtConcurrent>
++//#include <QFuture>
++//#include <QtConcurrent/QtConcurrent>
+ 
+ 
+-#define IPRIT_MULTITHREADING
++//#define IPRIT_MULTITHREADING
+ 
+ const QString fheader = QString::fromUtf8("YGF1");
+ 
+@@ -349,7 +349,7 @@
+     r.x2 = width();
+     r.y2 = height();
+     quint8 * d1 = data.data();
+-    quint8 * d2 = image.data.data();
++    quint8 * d2 = result.data.data();
+     blendImageInternal(r, d1, d2);
+ #endif
+ #ifdef IPRIT_MULTITHREADING
+@@ -470,7 +470,7 @@
+ #endif
+ }
+ 
+-void QIPGrayscaleImage::blendImageInternal(const IntRect &r, quint8 *  p1, const quint8 * p2)
++void QIPGrayscaleImage::blendImageInternal(const IntRect &r, quint8 *  p1, const quint8 * p2) const
+ {
+     int w = r.x2 - r.x1;
+     int h = r.y2 - r.y1;
+--- a/src/core/qipgrayscaleimage.h
++++ b/src/core/qipgrayscaleimage.h
+@@ -258,7 +258,7 @@
+     void toGrayScaleByEntropyChannel(const QImage &input, bool maxEntropy);
+     void histogramInternal(qreal *result, const IntRect &r) const;
+     void copyInternal(const IntRect &r, uint * image) const;
+-    void blendImageInternal(const IntRect &r, quint8 * p1, const quint8 * p2);
++    void blendImageInternal(const IntRect &r, quint8 * p1, const quint8 * p2) const;
+ };
+ 
+ Q_DECLARE_OPERATORS_FOR_FLAGS(QIPGrayscaleImage::BinarizationMethods)
+--- a/src/mainform.cpp
++++ b/src/mainform.cpp
+@@ -99,7 +99,7 @@
+     connect(label, SIGNAL(pageRemoved(int)), pages, SLOT(pageRemoved(int)));
+ 
+     statusBar()->show();
+-    useXSane = TRUE;
++    useXSane = true;
+     scanner = NULL;
+     //rotation = 0;
+     m_menu = new QMenu(graphicsView);
+@@ -180,7 +180,7 @@
+ 
+     this->sideBar->show();
+ 
+-    connect(actionRecognize_All_Pages, SIGNAL(triggered()), this, SLOT(recognizeAll()));
++    //connect(actionRecognize_All_Pages, SIGNAL(triggered()), this, SLOT(recognizeAll()));
+ 
+     QPixmap pm;
+     pm.load(":/align.png");
+@@ -1034,7 +1034,7 @@
+     filters << jpegFilter << pngFilter;
+     QFileDialog dialog(this,
+                        trUtf8("Save Image"), settings->getLastOutputDir());
+-    dialog.setFilters(filters);
++    dialog.setNameFilters(filters);
+     dialog.setAcceptMode(QFileDialog::AcceptSave);
+     dialog.setDefaultSuffix("jpg");
+     if (dialog.exec()) {
+--- a/src/page.cpp
++++ b/src/page.cpp
+@@ -375,7 +375,7 @@
+ 
+ bool Page::savePageAsImage(const QString &fileName, const QString &format)
+ {
+-    return img.save(fileName, format.toAscii().data());
++    return img.save(fileName, format.toUtf8().data());
+ }
+ 
+ void Page::saveRawBlockForRecognition(QRect r, const QString &fileName)
+@@ -408,7 +408,7 @@
+     spp.removeBars();
+     spp.removeNoise();
+     //applyTransforms(image, 1);
+-    image.save(fileName, format.toAscii().data());
++    image.save(fileName, format.toUtf8().data());
+ }
+ 
+ void Page::saveBlockForRecognition(int index, const QString &fileName)

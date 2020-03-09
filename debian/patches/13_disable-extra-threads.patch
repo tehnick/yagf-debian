@@ -1,0 +1,31 @@
+Description: disable extra threads
+Last-Update: 2020-03-09
+Origin: Mageia,
+ http://svnweb.mageia.org/packages/cauldron/yagf/current/SOURCES/yagf-0.9.5-fdr-mga-nothreads.patch?revision=1555054&view=co
+Forwarded: yes, https://sourceforge.net/p/yagf-ocr/tickets/72/
+Bug: https://sourceforge.net/p/yagf-ocr/tickets/72/
+
+
+--- a/src/core/qipgrayscaleimage.cpp
++++ b/src/core/qipgrayscaleimage.cpp
+@@ -335,7 +335,7 @@
+     r1.x1 = x1;
+     r1.x2 = x2;
+     r1.y1 = y1;
+-    r1.y2 = (y2 - y1)/2;
++    r1.y2 = y2;
+     IntRect r2;
+     r2.x1 = x1;
+     r2.x2 = x2;
+@@ -354,9 +354,9 @@
+ #endif
+ #ifdef IPRIT_MULTITHREADING
+     QFuture<void> future1 = QtConcurrent::run(this, &QIPGrayscaleImage::copyInternal2, r1, s, d);
+-    QFuture<void> future2 = QtConcurrent::run(this, &QIPGrayscaleImage::copyInternal2, r2, s, d);
++//    QFuture<void> future2 = QtConcurrent::run(this, &QIPGrayscaleImage::copyInternal2, r2, s, d);
+     future1.waitForFinished();
+-    future2.waitForFinished();
++//    future2.waitForFinished();
+ #endif
+ 
+     return result;

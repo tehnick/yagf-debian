@@ -1,0 +1,109 @@
+Description: fix spelling errors
+Last-Update: 2020-03-09
+Author: Boris Pek <tehnick-8@yandex.ru>
+Forwarded: yes, https://sourceforge.net/p/yagf-ocr/tickets/75/
+Bug: https://sourceforge.net/p/yagf-ocr/tickets/75/
+
+--- a/src/configdialog.ui
++++ b/src/configdialog.ui
+@@ -125,7 +125,7 @@
+        </item>
+        <item>
+         <property name="text">
+-         <string>Program Behavoir</string>
++         <string>Program Behavior</string>
+         </property>
+         <property name="font">
+          <font>
+--- a/src/mainform.cpp
++++ b/src/mainform.cpp
+@@ -319,7 +319,7 @@
+         if (settings->getSelectedEngine() == UseCuneiform) {
+             engineLabel->setText(trUtf8("Using Cuneiform"));
+             if (settings->selectedLanguagesAvailableTo("cuneiform").count() == 0) {
+-                styledWarningMessage(this, trUtf8("Cuneiform doesn't support any of selected recognition langualges.\nFalling back to tesseract. Please install tesseract."));
++                styledWarningMessage(this, trUtf8("Cuneiform doesn't support any of selected recognition languages.\nFalling back to tesseract. Please install tesseract."));
+                 settings->setSelectedEngine(UseTesseract);
+                 engineLabel->setText(trUtf8("Using Tesseract"));
+             }
+@@ -327,7 +327,7 @@
+         if (settings->getSelectedEngine() == UseTesseract) {
+             engineLabel->setText(trUtf8("Using Tesseract"));
+             if (settings->selectedLanguagesAvailableTo("tesseract").count() == 0) {
+-                styledWarningMessage(this, trUtf8("Tesseract doesn't support any of selected recognition langualges.\nFalling back to cueniform. Please install cuneiform."));
++                styledWarningMessage(this, trUtf8("Tesseract doesn't support any of selected recognition languages.\nFalling back to cueniform. Please install cuneiform."));
+                 settings->setSelectedEngine(UseCuneiform);
+                 engineLabel->setText(trUtf8("Using Cuneiform"));
+             }
+--- a/src/translations/yagf_fr.ts
++++ b/src/translations/yagf_fr.ts
+@@ -28,7 +28,7 @@
+     </message>
+     <message>
+         <location filename="../configdialog.ui" line="123"/>
+-        <source>Program Behavoir</source>
++        <source>Program Behavior</source>
+         <translation type="unfinished"></translation>
+     </message>
+     <message>
+@@ -272,13 +272,13 @@
+     </message>
+     <message>
+         <location filename="../mainform.cpp" line="334"/>
+-        <source>Cuneiform doesn&apos;t support any of selected recognition langualges.
++        <source>Cuneiform doesn&apos;t support any of selected recognition languages.
+ Falling back to tesseract. Please install tesseract.</source>
+         <translation>Cuneiform ne fonctionne pas avec les langualges de reconnaissance sélectionnés.Mise à tesseract.</translation>
+     </message>
+     <message>
+         <location filename="../mainform.cpp" line="342"/>
+-        <source>Tesseract doesn&apos;t support any of selected recognition langualges.
++        <source>Tesseract doesn&apos;t support any of selected recognition languages.
+ Falling back to cueniform. Please install cuneiform.</source>
+         <translation>Tesseract ne fonctionne pas avec les langualges de reconnaissance sélectionnés.Mise à cuneiform.</translation>
+     </message>
+--- a/src/translations/yagf_ru.ts
++++ b/src/translations/yagf_ru.ts
+@@ -95,7 +95,7 @@
+         <translation>Обработка после исправления наклона</translation>
+     </message>
+     <message>
+-        <source>Program Behavoir</source>
++        <source>Program Behavior</source>
+         <translation>Параметры</translation>
+     </message>
+     <message>
+@@ -270,12 +270,12 @@
+         <translation>Невозможно открыть файл %1. Проверьте, установлен ли imagemagick.</translation>
+     </message>
+     <message>
+-        <source>Cuneiform doesn&apos;t support any of selected recognition langualges.
++        <source>Cuneiform doesn&apos;t support any of selected recognition languages.
+ Falling back to tesseract. Please install tesseract.</source>
+         <translation>Cuneiform не поддерживает ни один из выбранных языков. Используйте Tesseract.</translation>
+     </message>
+     <message>
+-        <source>Tesseract doesn&apos;t support any of selected recognition langualges.
++        <source>Tesseract doesn&apos;t support any of selected recognition languages.
+ Falling back to cueniform. Please install cuneiform.</source>
+         <translation>Tesseract не поддерживает ни один из выбранных языков. Используйте Cuneiform.</translation>
+     </message>
+--- a/src/translations/yagf_uk.ts
++++ b/src/translations/yagf_uk.ts
+@@ -188,14 +188,14 @@
+     </message>
+     <message>
+         <location filename="../mainform.cpp" line="270"/>
+-        <source>Cuneiform doesn&apos;t support any of selected recognition langualges.
++        <source>Cuneiform doesn&apos;t support any of selected recognition languages.
+ Falling back to tesseract. Please install tesseract.</source>
+         <translation>Cuneiform не підтримує жодну з обраних мов розпізнавання.
+ Повернення до tesseract... Будь ласка встановіть tesseract.</translation>
+     </message>
+     <message>
+         <location filename="../mainform.cpp" line="278"/>
+-        <source>Tesseract doesn&apos;t support any of selected recognition langualges.
++        <source>Tesseract doesn&apos;t support any of selected recognition languages.
+ Falling back to cueniform. Please install cuneiform.</source>
+         <translation>Tesseract не підтримує жодну з обраних мов розпізнавання.
+ Повернення до cueniform... Будь ласка встановіть cueniform.</translation>

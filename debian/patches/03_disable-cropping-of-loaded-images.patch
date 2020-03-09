@@ -1,0 +1,44 @@
+Description: disable cropping of loaded images
+ Workaround for fixing of segmentation fault due to incorrect usage of smart
+ pointers.
+Last-Update: 2020-03-09
+Forwarded: not-needed
+Author: Boris Pek <tehnick-8@yandex.ru>
+Bug: https://sourceforge.net/p/yagf-ocr/tickets/50/
+Bug-Debian: https://bugs.debian.org/746380
+Bug-Ubuntu: https://bugs.launchpad.net/ubuntu/+source/yagf/+bug/1380371
+
+
+--- a/src/configdialog.cpp
++++ b/src/configdialog.cpp
+@@ -71,7 +71,7 @@
+     sl2.removeDuplicates();
+     ui->comboBoxSingleLang->clear();
+     ui->comboBoxSingleLang->addItems(sl2);
+-    ui->checkBoxCrop->setChecked(settings->getCropLoaded());
++    ui->checkBoxCrop->hide();
+     ui->checkBoxDeskew->setChecked(settings->getAutoDeskew());
+     ui->checkBoxPreprocess->setChecked(settings->getPreprocessed());
+     ui->checkBoxProcessAfterDeskew->setChecked(settings->getDoublePreprocessed());
+--- a/src/configdialog.ui
++++ b/src/configdialog.ui
+@@ -303,7 +303,7 @@
+                <string>Crop Image When Loaded</string>
+               </property>
+               <property name="checked">
+-               <bool>true</bool>
++               <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+--- a/src/settings.cpp
++++ b/src/settings.cpp
+@@ -81,7 +81,7 @@
+     rowEnd = settings->value("ocr/rowEnd", QVariant(QString("]"))).toString();
+     cellSeparator =settings->value("ocr/cellSeparator", QVariant("|")).toString();
+     rowFromNewLine = settings->value("ocr/rowFromNewLine", QVariant(true)).toBool();
+-    cropLoaded =  settings->value("processing/crop1", QVariant(true)).toBool();
++    cropLoaded =  false;
+     autoDeskew =  settings->value("processing/deskew", QVariant(true)).toBool();
+     preprocess = settings->value("processing/preprocess", QVariant(true)).toBool();
+     doublePreprocess = settings->value("processing/dpreprocess", QVariant(false)).toBool();

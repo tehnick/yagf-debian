@@ -1,0 +1,51 @@
+Description: remove online help
+ Online documentation is not available anymore.
+Last-Update: 2020-03-09
+Origin: Mageia,
+ http://svnweb.mageia.org/packages/cauldron/yagf/current/SOURCES/yagf-0.9.5-mga-del-online-help.patch?revision=1555054&view=co
+Forwarded: yes, https://sourceforge.net/p/yagf-ocr/tickets/68/
+Bug: https://sourceforge.net/p/yagf-ocr/tickets/68/
+
+
+--- a/src/mainform.cpp
++++ b/src/mainform.cpp
+@@ -115,7 +115,6 @@
+     connect(actionRecognize, SIGNAL(triggered()), this, SLOT(recognize()));
+     connect(action_Save, SIGNAL(triggered()), this, SLOT(saveAllText()));
+     connect(actionAbout, SIGNAL(triggered()), this, SLOT(showAboutDlg()));
+-    connect(actionOnlineHelp, SIGNAL(triggered()), this, SLOT(showHelp()));
+     connect(actionCopyToClipboard, SIGNAL(triggered()),textEdit, SLOT(copyClipboard()));
+     connect(actionSelect_All_Text, SIGNAL(triggered()),textEdit, SLOT(selectAll()));
+     connect(graphicsInput, SIGNAL(rightMouseClicked(int, int, bool)), this, SLOT(rightMouseClicked(int, int, bool)));
+--- a/src/mainform.ui
++++ b/src/mainform.ui
+@@ -527,7 +527,6 @@
+     <property name="title">
+      <string>&amp;Help</string>
+     </property>
+-    <addaction name="actionOnlineHelp"/>
+     <addaction name="actionAbout"/>
+    </widget>
+    <widget class="QMenu" name="menu_Settings">
+@@ -827,21 +826,11 @@
+     <string>Move to next image</string>
+    </property>
+   </action>
+-  <action name="actionOnine_help">
+-   <property name="text">
+-    <string>Online Help</string>
+-   </property>
+-  </action>
+   <action name="actionAbout">
+    <property name="text">
+     <string>About...</string>
+    </property>
+   </action>
+-  <action name="actionOnlineHelp">
+-   <property name="text">
+-    <string>Online Help</string>
+-   </property>
+-  </action>
+   <action name="actionCopyToClipboard">
+    <property name="icon">
+     <iconset resource="yagf.qrc">

@@ -1,0 +1,20 @@
+Description: fix application size
+Last-Update: 2020-03-09
+Origin: Mageia,
+ http://svnweb.mageia.org/packages/cauldron/yagf/current/SOURCES/yagf-0.9.5-mga-application-size.patch?revision=1555054&view=co
+Forwarded: yes, https://sourceforge.net/p/yagf-ocr/tickets/61/
+Bug: https://sourceforge.net/p/yagf-ocr/tickets/61/
+
+
+--- a/src/mainform.ui
++++ b/src/mainform.ui
+@@ -480,8 +480,7 @@
+            </widget>
+            <widget class="QLabel" name="label_2">
+             <property name="text">
+-             <string>    selectLangsBox-&gt;setStyleSheet(&quot;border: 1px solid blue; padding: 2px 2px 2px 18px; min-width: 6em; background-color: white; selection-background-color:blue; QComboBox::drop-down: { width: 0px; border-style: none}&quot;);
+-</string>
++             <string></string>
+             </property>
+            </widget>
+           </widget>

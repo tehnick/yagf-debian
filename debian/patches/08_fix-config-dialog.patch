@@ -1,0 +1,67 @@
+Description: fix config dialog
+Last-Update: 2020-03-09
+Origin: Mageia,
+ http://svnweb.mageia.org/packages/cauldron/yagf/current/SOURCES/yagf-0.9.5-mga-configdialog.patch?revision=1555054&view=co
+Forwarded: yes, https://sourceforge.net/p/yagf-ocr/tickets/69/
+Bug: https://sourceforge.net/p/yagf-ocr/tickets/69/
+
+
+--- a/src/configdialog.ui
++++ b/src/configdialog.ui
+@@ -72,10 +72,10 @@
+         <number>5</number>
+        </property>
+        <property name="viewMode">
+-        <enum>QListView::IconMode</enum>
++        <enum>QListView::ListMode</enum>
+        </property>
+        <property name="uniformItemSizes">
+-        <bool>true</bool>
++        <bool>false</bool>
+        </property>
+        <property name="batchSize">
+         <number>190</number>
+@@ -89,11 +89,11 @@
+         </property>
+         <property name="font">
+          <font>
+-          <pointsize>11</pointsize>
++          <pointsize>8</pointsize>
+          </font>
+         </property>
+         <property name="textAlignment">
+-         <set>AlignHCenter|AlignVCenter|AlignCenter</set>
++         <set>AlignVCenter</set>
+         </property>
+         <property name="icon">
+          <iconset resource="yagf.qrc">
+@@ -107,8 +107,13 @@
+         <property name="text">
+          <string>Image Processing</string>
+         </property>
++        <property name="font">
++         <font>
++          <pointsize>8</pointsize>
++         </font>
++        </property>
+         <property name="textAlignment">
+-         <set>AlignHCenter|AlignVCenter|AlignCenter</set>
++         <set>AlignVCenter</set>
+         </property>
+         <property name="icon">
+          <iconset resource="yagf.qrc">
+@@ -122,8 +127,13 @@
+         <property name="text">
+          <string>Program Behavoir</string>
+         </property>
++        <property name="font">
++         <font>
++          <pointsize>8</pointsize>
++         </font>
++        </property>
+         <property name="textAlignment">
+-         <set>AlignHCenter|AlignVCenter|AlignCenter</set>
++         <set>AlignVCenter</set>
+         </property>
+         <property name="icon">
+          <iconset resource="yagf.qrc">
