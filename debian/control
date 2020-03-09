@@ -2,7 +2,8 @@ Source: yagf
 Section: graphics
 Priority: optional
 Maintainer: Boris Pek <tehnick@debian.org>
-Build-Depends: cmake,
+Build-Depends: aspell,
+               cmake,
                debhelper-compat (= 12),
                libaspell-dev,
                qtbase5-dev,
